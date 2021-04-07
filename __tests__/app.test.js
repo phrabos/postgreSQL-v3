@@ -3,8 +3,9 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const MovieService = require('../lib/services/MovieService');
+const Stock = require('../lib/models/Stock')
 
-describe('vs3-postgreSQL routes', () => {
+describe('movie routes', () => {
   beforeEach(() => {
     return setup(pool);
 
@@ -95,4 +96,28 @@ describe('vs3-postgreSQL routes', () => {
   })
 });
 
+describe('stock market routes', () => {
+  beforeEach(() => {
+    return setup(pool);
 
+  });
+  beforeEach(() => {
+    Stock.addStock('TSLA', 'Tesla', false);
+    Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
+  });
+  it('creates a stock in the database', async ()=>{
+    const data = await request(app)
+    .post('/api/v1/stocks')
+    .send({
+      ticker: 'ARKK',
+      company: 'ARKK Investments',
+      isETF: true,
+    })
+    expect(data.body).toEqual({
+      id: expect.any(String),
+      ticker: 'ARKK',
+      company: 'ARKK Investments',
+      isETF: true,
+    })
+  })
+})

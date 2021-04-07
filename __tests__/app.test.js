@@ -70,7 +70,7 @@ describe('vs3-postgreSQL routes', () => {
     .get('/api/v1/movies/2')
 
       expect(data.body).toEqual({
-        id: '2',
+        id: expect.any(String),
         title: 'The Lost World',
         year: '1997',
         img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'

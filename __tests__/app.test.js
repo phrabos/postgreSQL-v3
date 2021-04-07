@@ -71,7 +71,7 @@ describe('movie routes', () => {
     .get('/api/v1/movies/2')
 
       expect(data.body).toEqual({
-        id: '2',
+        id: expect.any(String),
         title: 'The Lost World',
         year: '1997',
         img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'
@@ -87,7 +87,7 @@ describe('movie routes', () => {
       img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'
     },)
   expect(data.body).toEqual({
-      id: '2',
+      id: expect.any(String),
       title: 'Jurassic Park: The Lost World',
       year: '1997',
       img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'
@@ -129,7 +129,7 @@ describe('stock market routes', () => {
       isETF: true,
     })
     expect(data.body).toEqual({
-      id: '2',
+      id: expect.any(String),
       ticker: 'VTI-1',
       company: 'Vanguard Total Stock Market',
       isETF: true,
@@ -140,7 +140,7 @@ describe('stock market routes', () => {
     .get('/api/v1/stocks/2')
 
     expect(data.body).toEqual({
-      id: '2',
+      id: expect.any(String),
       ticker: 'VTI',
       company: 'Vanguard Total Stock Market',
       isETF: true,
@@ -152,16 +152,16 @@ describe('stock market routes', () => {
 
     expect(data.body).toEqual([
       {
-        id: '1',
+        id: expect.any(String),
         ticker: 'TSLA',
         company: 'Tesla',
         isETF: false,
       },
       {
-      id: '2',
-      ticker: 'VTI',
-      company: 'Vanguard Total Stock Market',
-      isETF: true,
+        id: expect.any(String),
+        ticker: 'VTI',
+        company: 'Vanguard Total Stock Market',
+        isETF: true,
     }
   ])
   })
@@ -170,7 +170,7 @@ describe('stock market routes', () => {
     .delete('/api/v1/stocks/1')
 
     expect(data.body).toEqual(      {
-      id: '1',
+      id: expect.any(String),
       ticker: 'TSLA',
       company: 'Tesla',
       isETF: false,

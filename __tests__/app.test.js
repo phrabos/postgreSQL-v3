@@ -120,4 +120,19 @@ describe('stock market routes', () => {
       isETF: true,
     })
   })
+  it('updates a stock in the database', async ()=>{
+    const data = await request(app)
+    .put('/api/v1/stocks/2')
+    .send({
+      ticker: 'VTI-1',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    })
+    expect(data.body).toEqual({
+      id: '2',
+      ticker: 'VTI-1',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    })
+  })
 })

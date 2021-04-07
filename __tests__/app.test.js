@@ -64,6 +64,35 @@ describe('vs3-postgreSQL routes', () => {
       },
     )
   })
+  it('gets a movie by id', async () =>{
+    
+    const data = await request(app)
+    .get('/api/v1/movies/2')
+
+      expect(data.body).toEqual({
+        id: '2',
+        title: 'The Lost World',
+        year: '1997',
+        img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'
+      },)
+
+  })
+  it('updates a movie', async ()=>{
+    const data = await request(app)
+    .put('/api/v1/movies/2')
+    .send({
+      title: 'Jurassic Park: The Lost World',
+      year: '1997',
+      img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'
+    },)
+  expect(data.body).toEqual({
+      id: '2',
+      title: 'Jurassic Park: The Lost World',
+      year: '1997',
+      img: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg'
+    },)
+
+  })
 });
 
 

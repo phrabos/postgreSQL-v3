@@ -135,4 +135,45 @@ describe('stock market routes', () => {
       isETF: true,
     })
   })
+  it('gets a stock by id', async()=>{
+    const data = await request(app)
+    .get('/api/v1/stocks/2')
+
+    expect(data.body).toEqual({
+      id: '2',
+      ticker: 'VTI',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    })
+  })
+  it('gets all stocks', async ()=>{
+    const data = await request(app)
+    .get('/api/v1/stocks')
+
+    expect(data.body).toEqual([
+      {
+        id: '1',
+        ticker: 'TSLA',
+        company: 'Tesla',
+        isETF: false,
+      },
+      {
+      id: '2',
+      ticker: 'VTI',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    }
+  ])
+  })
+  it('deletes a stock', async ()=>{
+    const data = await request(app)
+    .delete('/api/v1/stocks/1')
+
+    expect(data.body).toEqual(      {
+      id: '1',
+      ticker: 'TSLA',
+      company: 'Tesla',
+      isETF: false,
+    })
+  })
 })

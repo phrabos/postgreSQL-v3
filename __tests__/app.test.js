@@ -3,15 +3,12 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const MovieService = require('../lib/services/MovieService');
+const Stock = require('../lib/models/Stock')
 
-describe('vs3-postgreSQL routes', () => {
+describe('movie routes', () => {
   beforeEach(() => {
     return setup(pool);
 
-  });
-  beforeEach(() => {
-    MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg');
-    MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg');
   });
 
   it('adds a movie to db', async () => {
@@ -31,6 +28,8 @@ describe('vs3-postgreSQL routes', () => {
     )
   })
   it('gets all movies from database', async () => {
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     const data = await request(app)
       .get('/api/v1/movies')
     
@@ -52,6 +51,8 @@ describe('vs3-postgreSQL routes', () => {
     ])
   })
   it('removes a movie from the database', async () => {
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     const data = await request(app)
       .delete('/api/v1/movies/2')
     
@@ -65,6 +66,8 @@ describe('vs3-postgreSQL routes', () => {
     )
   })
   it('gets a movie by id', async () =>{
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     
     const data = await request(app)
     .get('/api/v1/movies/2')
@@ -78,6 +81,8 @@ describe('vs3-postgreSQL routes', () => {
 
   })
   it('updates a movie', async ()=>{
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     const data = await request(app)
     .put('/api/v1/movies/2')
     .send({
@@ -95,4 +100,91 @@ describe('vs3-postgreSQL routes', () => {
   })
 });
 
+describe('stock market routes', () => {
+  beforeEach(() => {
+    return setup(pool);
 
+  });
+
+  it('creates a stock in the database', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
+    const data = await request(app)
+    .post('/api/v1/stocks')
+    .send({
+      ticker: 'ARKK',
+      company: 'ARKK Investments',
+      isETF: true,
+    })
+    expect(data.body).toEqual({
+      id: expect.any(String),
+      ticker: 'ARKK',
+      company: 'ARKK Investments',
+      isETF: true,
+    })
+  })
+  it('updates a stock in the database', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
+    const data = await request(app)
+    .put('/api/v1/stocks/2')
+    .send({
+      ticker: 'VTI-1',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    })
+    expect(data.body).toEqual({
+      id: expect.any(String),
+      ticker: 'VTI-1',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    })
+  })
+  it('gets a stock by id', async()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
+    const data = await request(app)
+    .get('/api/v1/stocks/2')
+
+    expect(data.body).toEqual({
+      id: expect.any(String),
+      ticker: 'VTI',
+      company: 'Vanguard Total Stock Market',
+      isETF: true,
+    })
+  })
+  it('gets all stocks', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
+    const data = await request(app)
+    .get('/api/v1/stocks')
+
+    expect(data.body).toEqual([
+      {
+        id: expect.any(String),
+        ticker: 'TSLA',
+        company: 'Tesla',
+        isETF: false,
+      },
+      {
+        id: expect.any(String),
+        ticker: 'VTI',
+        company: 'Vanguard Total Stock Market',
+        isETF: true,
+    }
+  ])
+  })
+  it('deletes a stock', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
+    const data = await request(app)
+    .delete('/api/v1/stocks/1')
+
+    expect(data.body).toEqual(      {
+      id: expect.any(String),
+      ticker: 'TSLA',
+      company: 'Tesla',
+      isETF: false,
+    })
+  })
+})

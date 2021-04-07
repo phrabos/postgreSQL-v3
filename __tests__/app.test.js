@@ -10,10 +10,6 @@ describe('movie routes', () => {
     return setup(pool);
 
   });
-  beforeEach(async() => {
-    await Promise.all([MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg'),
-    MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')]);
-  });
 
   it('adds a movie to db', async () => {
     const data = await request(app)
@@ -32,6 +28,8 @@ describe('movie routes', () => {
     )
   })
   it('gets all movies from database', async () => {
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     const data = await request(app)
       .get('/api/v1/movies')
     
@@ -53,6 +51,8 @@ describe('movie routes', () => {
     ])
   })
   it('removes a movie from the database', async () => {
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     const data = await request(app)
       .delete('/api/v1/movies/2')
     
@@ -66,6 +66,8 @@ describe('movie routes', () => {
     )
   })
   it('gets a movie by id', async () =>{
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     
     const data = await request(app)
     .get('/api/v1/movies/2')
@@ -79,6 +81,8 @@ describe('movie routes', () => {
 
   })
   it('updates a movie', async ()=>{
+    await MovieService.addMovie('Jurassic Park', '1993', 'https://upload.wikimedia.org/wikipedia/en/e/e7/Jurassic_Park_poster.jpg')
+    await MovieService.addMovie('The Lost World', '1997', 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg/220px-The_Lost_World_%E2%80%93_Jurassic_Park_poster.jpg')
     const data = await request(app)
     .put('/api/v1/movies/2')
     .send({
@@ -101,11 +105,10 @@ describe('stock market routes', () => {
     return setup(pool);
 
   });
-  beforeEach(() => {
-    Stock.addStock('TSLA', 'Tesla', false);
-    Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
-  });
+
   it('creates a stock in the database', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
     const data = await request(app)
     .post('/api/v1/stocks')
     .send({
@@ -121,6 +124,8 @@ describe('stock market routes', () => {
     })
   })
   it('updates a stock in the database', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
     const data = await request(app)
     .put('/api/v1/stocks/2')
     .send({
@@ -136,6 +141,8 @@ describe('stock market routes', () => {
     })
   })
   it('gets a stock by id', async()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
     const data = await request(app)
     .get('/api/v1/stocks/2')
 
@@ -147,6 +154,8 @@ describe('stock market routes', () => {
     })
   })
   it('gets all stocks', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
     const data = await request(app)
     .get('/api/v1/stocks')
 
@@ -166,6 +175,8 @@ describe('stock market routes', () => {
   ])
   })
   it('deletes a stock', async ()=>{
+    await Stock.addStock('TSLA', 'Tesla', false);
+    await Stock.addStock('VTI', 'Vanguard Total Stock Market', true);
     const data = await request(app)
     .delete('/api/v1/stocks/1')
 
